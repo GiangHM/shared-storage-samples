@@ -17,7 +17,7 @@ Users can upload various types of documents (e.g., import/export files) through 
   - SQL Database – stores document metadata
   - App Service – hosts the API
   - Static Web App – serves the Vue SPA
-
+ 
 ## 🗂 Architecture Flow
 
 <img width="516" height="250" alt="explorer_FMZ1LuZdsR" src="https://github.com/user-attachments/assets/75cb2f81-4d6b-4cd7-a297-a59609908244" />
@@ -59,3 +59,8 @@ npm run dev
 - Verify the API is running.
 - Deploy the Vue app to Azure Static Web App.
 - Confirm the full application is functional
+
+  
+## License
+
+This project is licensed under the MIT License.
