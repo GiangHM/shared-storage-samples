@@ -60,6 +60,8 @@ npm run dev
 - Deploy the Vue app to Azure Static Web App.
 - Confirm the full application is functional
 
+<img width="1336" height="747" alt="imagee" src="https://github.com/user-attachments/assets/103e9623-9822-4576-a995-83bcd1111db7" />
+
   
 ## License
 
