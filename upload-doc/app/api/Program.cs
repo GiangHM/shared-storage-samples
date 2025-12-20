@@ -7,10 +7,20 @@ using StorageManagementAPI.Services;
 using Microsoft.Extensions.Configuration;
 using AzureBlobStorage.Extensions;
 using storageapi.Infra.efcore;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure OpenTelemetry
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource => resource.AddService("StorageManagementAPI"))
+    .WithTracing(tracing => tracing
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddConsoleExporter());
 
 builder.Services.AddAzureTableStorage();
 builder.Services.AddTransient<IDocTypeTableService, DocTypeTableService>();
@@ -38,15 +48,17 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+// Add OpenAPI support
+builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 //{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapOpenApi();
+    app.MapScalarApiReference();
 //}
 
 app.UseHttpsRedirection();
