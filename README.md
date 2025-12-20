@@ -54,7 +54,7 @@ npm install
 npm run dev
 ```
 
-### Obserbility - using Standalone Aspire Dashboard
+### Observability - using Standalone Aspire Dashboard
 
 <img width="1912" height="900" alt="image" src="https://github.com/user-attachments/assets/bcd7b388-2bd3-45d9-add2-209c3f02f5d2" />
 
