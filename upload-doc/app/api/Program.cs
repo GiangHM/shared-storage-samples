@@ -1,27 +1,54 @@
-using StorageManagementAPI;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using AzureTableStorage.Extensions;
-using StorageManagementAPI.Services;
-using Microsoft.Extensions.Configuration;
 using AzureBlobStorage.Extensions;
-using storageapi.Infra.efcore;
+using AzureTableStorage.Extensions;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using OpenTelemetry;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Scalar.AspNetCore;
+using storageapi.Infra.efcore;
+using StorageManagementAPI;
+using StorageManagementAPI.Services;
 
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.AddOpenTelemetry(logging =>
+{
+    logging.IncludeFormattedMessage = true;
+    logging.IncludeScopes = true;
+});
+
 // Configure OpenTelemetry
-builder.Services.AddOpenTelemetry()
-    .ConfigureResource(resource => resource.AddService("StorageManagementAPI"))
+var otel = builder.Services.AddOpenTelemetry()
+    .WithMetrics(metrics =>
+    {
+        metrics.AddAspNetCoreInstrumentation();
+        //metrics.AddMeter("Microsoft.AspNetCore.Hosting");
+        //metrics.AddMeter("Microsoft.AspNetCore.Server.Kestrel");
+    })
     .WithTracing(tracing => tracing
         .AddAspNetCoreInstrumentation()
         .AddHttpClientInstrumentation()
-        .AddConsoleExporter());
+        .AddEntityFrameworkCoreInstrumentation(options =>
+        {
+            options.EnrichWithIDbCommand = (activity, command) =>
+            {
+                var stateDisplayName = $"{command.CommandType} operation";
+                activity.DisplayName = stateDisplayName;
+                activity.SetTag("db.name", stateDisplayName);
+            };
+        }));
+
+var OtlpEndpoint = builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
+if (OtlpEndpoint != null)
+{
+    otel.UseOtlpExporter();
+}
 
 builder.Services.AddAzureTableStorage();
 builder.Services.AddTransient<IDocTypeTableService, DocTypeTableService>();

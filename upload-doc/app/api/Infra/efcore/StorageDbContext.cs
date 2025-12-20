@@ -13,12 +13,17 @@ namespace storageapi.Infra.efcore
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<StorageDocument>(topic =>
+            modelBuilder.Entity<StorageDocument>(document =>
             {
-                topic.Property("CreationDate").HasDefaultValueSql("getutcdate()");
-                topic.Property("ModificationDate").HasDefaultValueSql("getutcdate()");
-                topic.Property("IsActivated").HasDefaultValue(true);
+                document.Property(d => d.CreationDate)
+                    .HasDefaultValueSql("getutcdate()")
+                    .ValueGeneratedOnAdd();
 
+                document.Property(d => d.ModificationDate)
+                    .HasDefaultValueSql("getutcdate()")
+                    .ValueGeneratedOnAddOrUpdate();
+
+                document.Property("IsActivated").HasDefaultValue(true);
             });
         }
     }
