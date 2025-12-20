@@ -43,7 +43,7 @@ namespace StorageManagementAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<DocumentResponseModel>>> GetDocument()
         {
-            _logger.LogInformation("Save new document");
+            _logger.LogInformation("Get new document");
 
             var docs = await _dbContext.Documents.Select(x => new DocumentResponseModel
             {
