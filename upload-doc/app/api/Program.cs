@@ -9,6 +9,7 @@ using AzureBlobStorage.Extensions;
 using storageapi.Infra.efcore;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Scalar.AspNetCore;
 
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -50,15 +51,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 // Add OpenAPI support
-builder.Services.AddSwaggerGen();
+builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 //{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapOpenApi();
     app.MapScalarApiReference();
 //}
 
