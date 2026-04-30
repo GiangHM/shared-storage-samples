@@ -1,15 +1,12 @@
-using StorageManagementAPI.Entities;
 using StorageManagementAPI.Models;
 using StorageManagementAPI.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using storageapi.TableStorageEntities;
 
 namespace StorageManagementAPI.Controllers
 {

@@ -2,6 +2,7 @@ using AzureBlobStorage.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading.Tasks;
 
 namespace StorageManagementAPI.Controllers
@@ -19,13 +20,25 @@ namespace StorageManagementAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<string>> GenerateSasToken2([FromRoute] string containerName, [FromRoute] string fileName)
         {
-            _logger.LogInformation("Get SAS Token");
-            var url =  _blobService.CreateServiceSASBlob(containerName
-                , fileName
-                , 1
-                , null
-                , Azure.Storage.Sas.BlobContainerSasPermissions.Write);
-            return Ok(await Task.FromResult(url));
+            try
+            {
+
+
+                _logger.LogInformation("Get SAS Token");
+                var url = _blobService.CreateUserDelegationSasAsync(containerName
+                    , fileName
+                    , 1
+                    , null
+                    , Azure.Storage.Sas.BlobContainerSasPermissions.Write);
+                return Ok(await Task.FromResult(url));
+
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "Error");
+                throw;
+            }
         }
+
     }
 }

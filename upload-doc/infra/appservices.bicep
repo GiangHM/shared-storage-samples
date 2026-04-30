@@ -36,21 +36,23 @@ resource appServiceApp 'Microsoft.Web/sites@2024-04-01' = {
   }
 }
 
-@description('The name of the App Service app for the Node.js Vue 3 application.')
-param vueStaticAppName string
+// @description('The name of the App Service app for the Node.js Vue 3 application.')
+// param nodeAppServiceAppName string
 
-resource nodeStaticWebApp 'Microsoft.Web/staticSites@2024-04-01' = {
-  name: vueStaticAppName
-  location: location
-  tags: tags
-  properties: {
-    sku: {
-      name: 'Free'
-      tier: 'Free'
-    }
-  }
-}
+// resource nodeAppServiceApp 'Microsoft.Web/sites@2024-04-01' = {
+//   name: nodeAppServiceAppName
+//   location: location
+//   tags: tags
+//   properties: {
+//     serverFarmId: appServicePlan.id
+//     httpsOnly: true
+//     siteConfig: {
+//       linuxFxVersion: 'NODE|18-lts' // Specifies Node.js 18 LTS
+//       appCommandLine: '' // Optional: Specify a custom start command if needed
+//     }
+//   }
+// }
 
 @description('The default host name of the App Service app.')
 output appServiceAppHostName string = appServiceApp.properties.defaultHostName
-output nodeAppServiceApp string = nodeStaticWebApp.properties.defaultHostname
+// output nodeAppServiceApp string = nodeAppServiceApp.properties.defaultHostName

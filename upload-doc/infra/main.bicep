@@ -1,5 +1,5 @@
 param location string = resourceGroup().location
-param storageAccountName string = 'azlearningsa'
+param storageAccountName string = 'your-sa-name'
 
 @description('The name of the environment. This must be dev, test, or prod.')
 @allowed([
@@ -16,7 +16,7 @@ param solutionName string = '${uniqueString(resourceGroup().id)}'
 
 var appServicePlanName = '${environmentName}-${solutionName}-plan'
 var appServiceAppApiName = '${environmentName}-${solutionName}-api'
-var vueStaticAppName = '${environmentName}-${solutionName}-app'
+var appServiceAppName = '${environmentName}-${solutionName}-app'
 
 @description('The name and tier of the App Service plan SKU.')
 param appServicePlanSku object = {
@@ -25,7 +25,7 @@ param appServicePlanSku object = {
 }
 
 var tags = {
-  tagName: 'az204learning'
+  tagName: 'YourTagValue'
 }
 
 module storageAccount 'storageaccount.bicep' = {
@@ -44,7 +44,7 @@ module appService 'appservices.bicep' = {
     appServicePlanName: appServicePlanName
     appServiceAppName: appServiceAppApiName
     appServicePlanSkuName: appServicePlanSku.name
-    vueStaticAppName: vueStaticAppName
+    // nodeAppServiceAppName: appServiceAppName
     tags: tags
   }
  
@@ -66,7 +66,7 @@ module sqlService 'sqlservice.bicep' = {
     sqlServerName: sqlServerName
     adminUsername: sqlServerAdministratorLogin
     adminPassword: sqlServerAdministratorPassword
-    sqlDatabaseName: 'azlearningdb'
+    sqlDatabaseName: 'testdb'
   }
 }
 

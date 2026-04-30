@@ -275,5 +275,4 @@ __pycache__/
 
 # Healthcheck
 healthchecksdb
-
-upload-doc/app/api/appsettings.Development.json
+upload-doc/app/webapp/package-lock.json

@@ -1,12 +1,11 @@
-using AzureBlobStorage.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using storageapi.Infra.efcore;
+using sharedentities.DBEntities;
 using storageapi.Models;
-using StorageManagementAPI.Entities;
-using System.Collections;
+using storageapi.Services;
+using storagedal.Infra.efcore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +15,8 @@ namespace StorageManagementAPI.Controllers
     [ApiController]
     [Route("[controller]")]
     public class DocumentManagementController(ILogger<SasTokenGeneratorController> _logger
-            , StorageDbContext _dbContext) : ControllerBase
+        , StorageDbContext _dbContext
+        , IAzureServiceBusHelper _serviceBusHelper) : ControllerBase
     {
 
         [HttpPost]
@@ -43,7 +43,7 @@ namespace StorageManagementAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<DocumentResponseModel>>> GetDocument()
         {
-            _logger.LogInformation("Get new document");
+            _logger.LogInformation("Get document");
 
             var docs = await _dbContext.Documents.Select(x => new DocumentResponseModel
             {
@@ -52,6 +52,23 @@ namespace StorageManagementAPI.Controllers
                 IsActivated = x.IsActivated,
             }).ToListAsync();
             return Ok(docs);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<bool>> CreateDocumentWithAsyncProcess([FromBody] DocumentCreationRequestModel document)
+        {
+            _logger.LogInformation("Save new document with async process pattern");
+            
+            var requestItem = new StorageDocument
+            {
+                DocTypeCode = document.DocTypeCode,
+                DocUrl = document.DocUrl,
+            };
+            await _serviceBusHelper.SendMessageAsync(requestItem, "document-creation-queue");
+            return Ok(true);
         }
     }
 }

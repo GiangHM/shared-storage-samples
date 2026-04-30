@@ -1,10 +1,12 @@
+//import { environment } from '@/environment/environment.dev';
 import axios, { AxiosError, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 
 
 export default class HttpService {
-    baseUrl: string = "";
+    baseUrl: string = "your api endpoint here";
     CancelToken = axios.CancelToken;
     source: any;
+    private userToken = "";
 
     constructor() {
         

@@ -1,4 +1,4 @@
-﻿using StorageManagementAPI.Entities;
+﻿using storageapi.TableStorageEntities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

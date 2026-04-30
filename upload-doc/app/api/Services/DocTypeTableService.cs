@@ -1,9 +1,9 @@
-﻿using StorageManagementAPI.Entities;
-using Azure.Data.Tables;
+﻿using Azure.Data.Tables;
 using AzureTableStorage.Services;
 using AzureTableStorage.Settings;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Options;
+using storageapi.TableStorageEntities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

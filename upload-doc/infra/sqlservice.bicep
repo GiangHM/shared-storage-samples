@@ -14,7 +14,7 @@ param sqlDatabaseName string
 @description('The location for the Azure SQL resources')
 param location string = resourceGroup().location
 param tags object = {
-  tagName: 'az204learning'
+  tagName: 'YourTagValue'
 }
 
 resource sqlServer 'Microsoft.Sql/servers@2022-02-01-preview' = {

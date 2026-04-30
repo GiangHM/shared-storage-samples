@@ -1,7 +1,6 @@
-﻿using StorageManagementAPI.Entities;
-using StorageManagementAPI.Models;
+﻿using StorageManagementAPI.Models;
 using AutoMapper;
-using Azure.Data.Tables;
+using storageapi.TableStorageEntities;
 
 namespace StorageManagementAPI
 {

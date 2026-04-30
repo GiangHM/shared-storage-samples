@@ -32,6 +32,7 @@ async function uploadAndSave() {
         sasToken.value = await sasTokenService.getBlobSasToken("testcontainer", fileName.value);
 
         const content:string = base64String.value;
+        // const fakeContent = "Testing"
         const blockBlobClient = new BlobClient(sasToken.value)
         const uploadBlobResponse = await blockBlobClient.getBlockBlobClient().upload(content, content.length);
 

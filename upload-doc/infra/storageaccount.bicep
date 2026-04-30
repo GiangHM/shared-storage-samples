@@ -1,9 +1,9 @@
-param storageAccountName string = 'azlearningsa'
+param storageAccountName string = 'your-sa-name'
 var storageAccountSku = 'Standard_LRS'
 var storageAccountKind = 'StorageV2'
 param location string = resourceGroup().location
 param tags object = {
-  tagName: 'az204learning'
+  tagName: 'YourTagValue'
 }
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
